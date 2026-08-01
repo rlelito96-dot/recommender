@@ -1,0 +1,55 @@
+# ENV
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# build / dist
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# virtual environments
+.venv/
+venv/
+env/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# mypy / type checking (jeśli dodasz później)
+.mypy_cache/
+
+# pre-commit
+*.bak
+
+# Ruff cache
+.ruff_cache/
+
+# ML
+data/raw/
+data/processed/
+mlruns/
+*.pkl
+*.joblib
