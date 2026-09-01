@@ -53,3 +53,6 @@ data/processed/
 mlruns/
 *.pkl
 *.joblib
+
+# Jupyter
+.ipynb_checkpoints/
