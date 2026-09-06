@@ -51,6 +51,8 @@ Thumbs.db
 data/raw/
 data/processed/
 mlruns/
+notebooks/mlflow.db
+mlflow.db
 *.pkl
 *.joblib
 
