@@ -49,5 +49,5 @@ dev = [
     "coverage==7.15.2",
     "ruff==0.16.1",
     "python-dotenv==1.2.2",
-    "mypy==2.3.0"
+    "mypy==2.3.1"
 ]
