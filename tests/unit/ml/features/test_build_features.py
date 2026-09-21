@@ -41,6 +41,25 @@ class TestBuildCustomerProductMatrix:
         matrix = build_customer_product_matrix(df)
         assert matrix.loc[1, "A"] == 5
 
+    def test_binary_matrix(self) -> None:
+        df = pd.DataFrame(
+            {
+                "Customer ID": [1, 1, 1, 2],
+                "StockCode": ["A", "A", "B", "A"],
+                "Quantity": [10, 5, 3, 7],
+            }
+        )
+
+        matrix = build_customer_product_matrix(
+            df,
+            binary=True,
+        )
+
+        assert matrix.loc[1, "A"] == 1
+        assert matrix.loc[1, "B"] == 1
+        assert matrix.loc[2, "A"] == 1
+
+
 
 class TestComputeProductSimilarity:
     def test_diagonal_is_one(self) -> None:

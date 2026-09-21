@@ -17,15 +17,18 @@ def precision_at_k(
 
     return 1.0 if target in top_k else 0.0
 
-
 def evaluate_model(
-    train_df: pd.DataFrame,
-    test_df: pd.DataFrame,
-    k: int = 5,
+        train_df: pd.DataFrame,
+        test_df: pd.DataFrame,
+        k: int = 5,
+        binary: bool = False,
 ) -> float:
-    """Evaluate product recommendations using Precision@K."""
 
-    customer_product_matrix = build_customer_product_matrix(train_df)
+    customer_product_matrix = build_customer_product_matrix(
+        train_df,
+        binary=binary,
+    )
+
     similarity_df = compute_product_similarity(customer_product_matrix)
 
     scores = []

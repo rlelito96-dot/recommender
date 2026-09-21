@@ -23,6 +23,13 @@ def main() -> None:
         k=5,
     )
 
+    binary_cosine_precision_at_5 = evaluate_model(
+        train_df=train_df,
+        test_df=test_df,
+        k=5,
+        binary=True,
+    )
+
     print(f"Train interactions: {len(train_df)}")
     print(f"Test interactions: {len(test_df)}")
     print(
@@ -30,6 +37,10 @@ def main() -> None:
         f"{popularity_precision_at_5:.4f}"
     )
     print(f"Cosine recommender Precision@5: {cosine_precision_at_5:.4f}")
+    print(
+        f"Cosine recommender (binary) Precision@5: "
+        f"{binary_cosine_precision_at_5:.4f}"
+    )
 
 
 if __name__ == "__main__":
