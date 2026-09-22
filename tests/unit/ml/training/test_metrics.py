@@ -1,6 +1,11 @@
 import pandas as pd
 
 from app.ml.training.metrics import precision_at_k, evaluate_model
+from app.ml.training.metrics import (
+    evaluate_model,
+    filter_seen_products,
+    precision_at_k,
+)
 
 
 def test_precision_at_k_returns_one_for_hit() -> None:
@@ -63,3 +68,14 @@ def test_evaluate_model_returns_score() -> None:
     )
 
     assert 0.0 <= result <= 1.0
+
+def test_filter_seen_products():
+    recommendations = ["A", "B", "C", "D"]
+    seen_products = {"A", "C"}
+
+    result = filter_seen_products(
+        recommendations=recommendations,
+        seen_products=seen_products,
+    )
+
+    assert result == ["B", "D"]

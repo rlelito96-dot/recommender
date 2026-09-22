@@ -17,11 +17,24 @@ def precision_at_k(
 
     return 1.0 if target in top_k else 0.0
 
+
+def filter_seen_products(
+    recommendations: list[str],
+    seen_products: set[str],
+) -> list[str]:
+
+    return [
+        product_id
+        for product_id in recommendations
+        if product_id not in seen_products
+    ]
+
+
 def evaluate_model(
-        train_df: pd.DataFrame,
-        test_df: pd.DataFrame,
-        k: int = 5,
-        binary: bool = False,
+    train_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    k: int = 5,
+    binary: bool = False,
 ) -> float:
 
     customer_product_matrix = build_customer_product_matrix(
@@ -49,7 +62,7 @@ def evaluate_model(
             recommendations = get_similar_products(
                 product_id=product_id,
                 similarity_df=similarity_df,
-                n=k,
+                n=20,
             )
 
             for recommended_product, similarity_score in recommendations.items():
@@ -58,14 +71,23 @@ def evaluate_model(
                     + similarity_score
                 )
 
-        top_recommendations = [
+        candidate_recommendations = [
             product_id
             for product_id, _ in sorted(
                 candidate_scores.items(),
                 key=lambda item: item[1],
                 reverse=True,
-            )[:k]
+            )
         ]
+
+        seen_products = set(customer_products)
+
+        candidate_recommendations = filter_seen_products(
+            recommendations=candidate_recommendations,
+            seen_products=seen_products,
+        )
+
+        top_recommendations = candidate_recommendations[:k]
 
         score = precision_at_k(
             recommendations=top_recommendations,
