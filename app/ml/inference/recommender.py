@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 
 from app.ml.inference.predict import get_similar_products
@@ -52,3 +54,18 @@ class ProductRecommender:
         ]
 
         return recommendations[:n]
+
+    def save(self, path: Path) -> None:
+        """Save recommender artifact to disk."""
+
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        self.similarity_df.to_pickle(path)
+
+    @classmethod
+    def load(cls, path: Path) -> "ProductRecommender":
+        """Load recommender artifact from disk."""
+
+        similarity_df = pd.read_pickle(path)
+
+        return cls(similarity_df=similarity_df)

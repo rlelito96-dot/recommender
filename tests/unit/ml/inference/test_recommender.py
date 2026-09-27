@@ -22,3 +22,25 @@ def test_recommend_for_history_excludes_seen_products() -> None:
     )
 
     assert recommendations == ["B", "C"]
+
+def test_recommender_can_be_saved_and_loaded(tmp_path) -> None:
+    similarity_df = pd.DataFrame(
+        {
+            "A": [1.0, 0.9],
+            "B": [0.9, 1.0],
+        },
+        index=["A", "B"],
+    )
+
+    recommender = ProductRecommender(similarity_df)
+
+    path = tmp_path / "model.pkl"
+
+    recommender.save(path)
+
+    loaded_recommender = ProductRecommender.load(path)
+
+    pd.testing.assert_frame_equal(
+        loaded_recommender.similarity_df,
+        similarity_df,
+    )
