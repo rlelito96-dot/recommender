@@ -8,6 +8,8 @@ from alembic import context
 from app.core.exceptions import ValidationException
 from app.infrastructure.db.base import Base
 
+from app.infrastructure.db.models import ProductInteractionModel
+
 load_dotenv()
 
 if not os.getenv("DATABASE_URL"):
