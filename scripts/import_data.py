@@ -6,6 +6,9 @@ from app.infrastructure.db.session import SessionLocal
 from app.ml.data.loader import clean_transactions, load_raw_data
 
 
+BATCH_SIZE = 5_000
+
+
 def main() -> None:
     print("Loading raw data...")
 
@@ -17,20 +20,30 @@ def main() -> None:
     session = SessionLocal()
 
     try:
-        interactions = [
-            ProductInteractionModel(
-                customer_id=int(row["Customer ID"]),
-                product_id=str(row["StockCode"]),
-                quantity=int(row["Quantity"]),
-                price=float(row["Price"]),
+        for start in range(0, len(df_clean), BATCH_SIZE):
+            batch = df_clean.iloc[start : start + BATCH_SIZE]
+
+            interactions = [
+                {
+                    "customer_id": int(row["Customer ID"]),
+                    "product_id": str(row["StockCode"]),
+                    "quantity": int(row["Quantity"]),
+                    "price": float(row["Price"]),
+                }
+                for _, row in batch.iterrows()
+            ]
+
+            session.execute(
+                ProductInteractionModel.__table__.insert(),
+                interactions,
             )
-            for _, row in df_clean.iterrows()
-        ]
 
-        session.add_all(interactions)
-        session.commit()
+            session.commit()
 
-        print(f"Imported {len(interactions)} interactions.")
+            print(
+                f"Imported {min(start + BATCH_SIZE, len(df_clean))}"
+                f"/{len(df_clean)}"
+            )
 
     except Exception:
         session.rollback()
