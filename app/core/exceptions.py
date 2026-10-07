@@ -17,3 +17,12 @@ class ValidationException(AppException):
 class UnauthorizedException(AppException):
     def __init__(self, message: str = "Unauthorized") -> None:
         super().__init__(message)
+
+
+class CustomerNotFoundException(Exception):
+    def __init__(self, customer_id: int) -> None:
+        self.customer_id = customer_id
+
+        super().__init__(
+            f"Customer {customer_id} not found",
+        )

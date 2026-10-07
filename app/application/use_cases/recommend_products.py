@@ -3,6 +3,8 @@ from app.infrastructure.repositories.product_interaction import (
 )
 from app.ml.inference.recommender import ProductRecommender
 
+from app.core.exceptions import CustomerNotFoundException
+
 
 class RecommendProductsUseCase:
     def __init__(
@@ -14,13 +16,16 @@ class RecommendProductsUseCase:
         self.recommender = recommender
 
     def execute(
-        self,
-        customer_id: int,
-        n: int = 5,
+            self,
+            customer_id: int,
+            n: int = 5,
     ) -> list[str]:
         customer_products = self.repository.get_customer_products(
             customer_id=customer_id,
         )
+
+        if not customer_products:
+            raise CustomerNotFoundException(customer_id)
 
         return self.recommender.recommend_for_history(
             customer_products=customer_products,
